@@ -107,14 +107,14 @@ impl SocketData for sockaddr_un
 			const AsciiNull: i8 = 0;
 
 			let first_byte = unsafe { *local_address.sun_path.get_unchecked(0) };
-			let is_abstract = first_byte == AsciiNull;
+			let is_abstract = first_byte == AsciiNull as _;
 			if unlikely!(is_abstract)
 			{
 				return
 			}
 
 			let last_byte = unsafe { *local_address.sun_path.get_unchecked(sockaddr_un::PathLength - 1) };
-			let last_byte_is_zero_terminated = last_byte == AsciiNull;
+			let last_byte_is_zero_terminated = last_byte == AsciiNull as _;
 			if likely!(last_byte_is_zero_terminated)
 			{
 				unsafe
@@ -130,7 +130,7 @@ impl SocketData for sockaddr_un
 					#[allow(deprecated)]
 					let mut copy: [c_char; sockaddr_un::PathLength + 1] = uninitialized();
 					copy.as_mut_ptr().copy_from_nonoverlapping(local_address.sun_path.as_ptr(), sockaddr_un::PathLength);
-					*copy.get_unchecked_mut(sockaddr_un::PathLength) = AsciiNull;
+					*copy.get_unchecked_mut(sockaddr_un::PathLength) = AsciiNull as _;
 
 					// NOTE: Result ignored; nothing we can do about it.
 					unlink(copy.as_ptr());
