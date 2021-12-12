@@ -3,7 +3,7 @@
 
 
 #[cfg(target_pointer_width = "32")]
-#[derive(Default, Debug, Clone)]
+#[derive(Debug, Clone)]
 #[repr(C)]
 pub(crate) struct msghdr
 {
